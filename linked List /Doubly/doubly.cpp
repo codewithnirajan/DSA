@@ -14,14 +14,17 @@ Node* head = NULL;
 void insertBeginning(int value)
 {
     Node* newNode = new Node();
+    Node* temp;
 
+    temp = head;
+
+    newNode->next = temp;
     newNode->data = value;
     newNode->prev = NULL;
-    newNode->next = head;
 
-    if (head != NULL)
+    if (temp != NULL)
     {
-        head->prev = newNode;
+        temp->prev = newNode;
     }
 
     head = newNode;
@@ -32,12 +35,13 @@ void insertEnd(int value)
 {
     Node* newNode = new Node();
 
-    newNode->data = value;
-    newNode->next = NULL;
-
+    // If list is empty
     if (head == NULL)
     {
+        newNode->data = value;
+        newNode->next = NULL;
         newNode->prev = NULL;
+
         head = newNode;
         return;
     }
@@ -49,24 +53,12 @@ void insertEnd(int value)
         temp = temp->next;
     }
 
-    temp->next = newNode;
+    newNode->data = value;
+    newNode->next = NULL;
     newNode->prev = temp;
+
+    temp->next = newNode;
 }
-
-/*
-
-Assignment
-Implement the following functions:
-
-1. Insert a node at Position P (Position starts from 1)
-
-void insertPosition(int position, int value);
-
-2. Delete a node from Position P (Position starts from 1)
-
-void deletePosition(int position);
-
-*/
 
 // Delete from Beginning
 void deleteBeginning()
@@ -76,15 +68,20 @@ void deleteBeginning()
         return;
     }
 
-    Node* temp = head;
-    head = head->next;
+    Node* temp1;
+    Node* temp2;
 
-    if (head != NULL)
+    temp1 = head;
+    temp2 = head->next;
+
+    if (temp2 != NULL)
     {
-        head->prev = NULL;
+        temp2->prev = NULL;
     }
 
-    delete temp;
+    head = temp2;
+
+    delete temp1;
 }
 
 // Delete from End
@@ -95,6 +92,7 @@ void deleteEnd()
         return;
     }
 
+    // Only one node
     if (head->next == NULL)
     {
         delete head;
@@ -102,14 +100,19 @@ void deleteEnd()
         return;
     }
 
-    Node* temp = head;
+    Node* temp;
+    Node* save;
+
+    temp = head;
 
     while (temp->next != NULL)
     {
+        save = temp;
         temp = temp->next;
     }
 
-    temp->prev->next = NULL;
+    save->next = NULL;
+
     delete temp;
 }
 
@@ -120,18 +123,20 @@ void display()
 
     while (temp != NULL)
     {
-        cout << temp->data << " ";
+        cout << temp->data << " <-> ";
         temp = temp->next;
     }
 
     cout << "NULL" << endl;
 }
-/*
+// Display Address
 void displayAddress()
 {
     Node* temp = head;
 
-    cout << "\nAddress\t\tData\tPrev\t\tNext\n";
+    cout << "\n-------------------------------------------------------------\n";
+    cout << "Address\t\tData\tPrev\t\tNext\n";
+    cout << "-------------------------------------------------------------\n";
 
     while (temp != NULL)
     {
@@ -142,8 +147,9 @@ void displayAddress()
 
         temp = temp->next;
     }
+
+    cout << "-------------------------------------------------------------\n";
 }
-    */
 
 int main()
 {
@@ -165,8 +171,7 @@ int main()
 
     cout << "After deleting from end: ";
     display();
-    
-    // displayAddress();
+    displayAddress();
 
     return 0;
 }
